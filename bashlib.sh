@@ -25,7 +25,7 @@ checkargs() {
   ### Strings ###
 
 bashlib.str.encrypt() {
-checkargs "$1" "Usage: ${FUNCNAME[0]} -f|-s [<file>|[string]] [passphrase]\nEncrypts a string or file with given passphrase"
+  checkargs "$1" "Usage: ${FUNCNAME[0]} -f|-s [<file>|[string]] [passphrase]\nEncrypts a string or file with given passphrase"
   while [ $# -gt 0 ]; do
     case $1 in
       -f)
@@ -58,7 +58,7 @@ checkargs "$1" "Usage: ${FUNCNAME[0]} -f|-s [<file>|[string]] [passphrase]\nEncr
 }
 
 bashlib.str.decrypt() {
-checkargs "$1" "Usage: ${FUNCNAME[0]} -f|-s [<file>|[string]] [passphrase]\nDecrypts a string or file with given passphrase"
+  checkargs "$1" "Usage: ${FUNCNAME[0]} -f|-s [<file>|[string]] [passphrase]\nDecrypts a string or file with given passphrase"
   while [ $# -gt 0 ]; do
     case $1 in
       -f)
@@ -104,7 +104,7 @@ bashlib.str.getLen() {
 }
 
 bashlib.str.getConfig() {
-checkargs "$1" "Usage: ${FUNCNAME[0]} [key] <configfile>\nGets value of a key in a config file"
+  checkargs "$1" "Usage: ${FUNCNAME[0]} [key] <configfile>\nGets value of a key in a config file"
   local key="$1"
   local file="$2"
   config=$(grep "$key=" "$file")
@@ -113,12 +113,12 @@ checkargs "$1" "Usage: ${FUNCNAME[0]} [key] <configfile>\nGets value of a key in
 }
 
 bashlib.str.setConfig() {
-checkargs "$1" "Usage: ${FUNCNAME[0]} [key] [value] <configfile>\nSets a config option in a specified file"
+  checkargs "$1" "Usage: ${FUNCNAME[0]} [key] [value] <configfile>\nSets a config option in a specified file"
   local key="$1"
   local val="$2"
   local file="$3"
   while read -r line; do
-    if [ "$(echo "$line" | grep -q "$key")" ]; then
+    if (echo "$line" | grep -q "$key"); then
       oldval="$(echo "$line" | cut -d'=' -f2)"
       echo "${line/$oldval/$val}"
       echo "${line/$oldval/$val}" >> tmpconfig
@@ -133,7 +133,7 @@ checkargs "$1" "Usage: ${FUNCNAME[0]} [key] [value] <configfile>\nSets a config 
   ### Cursors ###
 
 bashlib.cursor.setPos() {
-checkargs "$1" "Usage: ${FUNCNAME[0]} <line> <column>\nSets the cursor position"
+  checkargs "$1" "Usage: ${FUNCNAME[0]} <line> <column>\nSets the cursor position"
   echo -en "\033[${1};${2}f"
 }
 
@@ -188,7 +188,7 @@ bashlib.bgcolor.white() { echo -en "\033[107m"; }
 bashlib.rand() { echo "$RANDOM"; }
 
 bashlib.rand.range() {
-checkargs "$1" "Usage: ${FUNCNAME[0]} <n1> <n2>\nGenerates a number between <n1> and <n2>"
+  checkargs "$1" "Usage: ${FUNCNAME[0]} <n1> <n2>\nGenerates a number between <n1> and <n2>"
   local num1="$1"
   local num2="$2"
   echo "$((RANDOM % num2 + num1))"
@@ -215,27 +215,27 @@ checkargs "$1" "Usage: ${FUNCNAME[0]} [tcp|udp] [host] <port>\nCreates a network
 }
 
 bashlib.net.close() {
-checkargs "$1" "Usage: ${FUNCNAME[0]} <fd>\nCloses an open network connection"
+  checkargs "$1" "Usage: ${FUNCNAME[0]} <fd>\nCloses an open network connection"
   local myfd="$1"
   eval "exec $myfd>&-"
 }
 
 bashlib.net.send() {
-checkargs "$1" "Usage: ${FUNCNAME[0]} <fd> data\nSends data to an open connection but data must be enclosed in double quotes"
+  checkargs "$1" "Usage: ${FUNCNAME[0]} <fd> data\nSends data to an open connection but data must be enclosed in double quotes"
   local myfd="$1"
   local data="$2"
   echo "$data" >& "$myfd"
 }
 
 bashlib.net.read() {
-checkargs "$1" "Usage: ${FUNCNAME[0]} <fd>\nReads data from an open connection"
+  checkargs "$1" "Usage: ${FUNCNAME[0]} <fd>\nReads data from an open connection"
   local myfd="$1"
   read -r data <& "$myfd"
   echo "$data"
 }
 
 bashlib.net.portscan() {
-checkargs "$1" "Usage: ${FUNCNAME[0]} [tcp|udp] [host] <port>\nScans Port of target host"
+  checkargs "$1" "Usage: ${FUNCNAME[0]} [tcp|udp] [host] <port>\nScans Port of target host"
   host="$2"
   proto="$1"
   port="$3"
