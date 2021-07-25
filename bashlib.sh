@@ -5,7 +5,7 @@
 # contains many different functions that can be used
 # in various ways some of these are for strings,
 # numbers, randoms and networking. There are a total
-# of 44 functions. For a full list of functions, source
+# of 45 functions. For a full list of functions, source
 # the file with ". bashlib.sh" then execute "bashlib.list"
 
 checkargs() {
@@ -25,7 +25,7 @@ checkargs() {
   ### Strings ###
 
 bashlib.str.encrypt() {
-  checkargs "$1" "Usage: ${FUNCNAME[0]} -f|-s [<file>|[string]] [passphrase]\nEncrypts a string or file with given passphrase"
+checkargs "$1" "Usage: ${FUNCNAME[0]} -f|-s [<file>|[string]] [passphrase]\nEncrypts a string or file with given passphrase"
   while [ $# -gt 0 ]; do
     case $1 in
       -f)
@@ -58,7 +58,7 @@ bashlib.str.encrypt() {
 }
 
 bashlib.str.decrypt() {
-  checkargs "$1" "Usage: ${FUNCNAME[0]} -f|-s [<file>|[string]] [passphrase]\nDecrypts a string or file with given passphrase"
+checkargs "$1" "Usage: ${FUNCNAME[0]} -f|-s [<file>|[string]] [passphrase]\nDecrypts a string or file with given passphrase"
   while [ $# -gt 0 ]; do
     case $1 in
       -f)
@@ -133,7 +133,7 @@ bashlib.str.setConfig() {
   ### Cursors ###
 
 bashlib.cursor.setPos() {
-  checkargs "$1" "Usage: ${FUNCNAME[0]} <line> <column>\nSets the cursor position"
+checkargs "$1" "Usage: ${FUNCNAME[0]} <line> <column>\nSets the cursor position"
   echo -en "\033[${1};${2}f"
 }
 
@@ -144,9 +144,9 @@ bashlib.cursor.getPos() {
   echo -en "\033[6n" > /dev/tty
   IFS=' ' read -r -d R -a pos
   stty "$oldstty"
-  line=$(($(echo "${pos[0]:2}" |cut -d';' -f1) - 1))
-  col=$(echo "${pos[1]}"|cut -d';' -f2 | cut -d'[' -f1)
-  echo -n "$line $col"
+  line="$(($(echo "${pos[0]:2}" |cut -d';' -f1) - 1))"
+  col="$(echo "${pos}[1]"|cut -d';' -f2 | cut -d'[' -f1)"
+  echo "$line $col"
 }
 
 bashlib.cursor.up() { echo -en "\033[${1}A"; }
@@ -188,7 +188,7 @@ bashlib.bgcolor.white() { echo -en "\033[107m"; }
 bashlib.rand() { echo "$RANDOM"; }
 
 bashlib.rand.range() {
-  checkargs "$1" "Usage: ${FUNCNAME[0]} <n1> <n2>\nGenerates a number between <n1> and <n2>"
+checkargs "$1" "Usage: ${FUNCNAME[0]} <n1> <n2>\nGenerates a number between <n1> and <n2>"
   local num1="$1"
   local num2="$2"
   echo "$((RANDOM % num2 + num1))"
@@ -196,6 +196,12 @@ bashlib.rand.range() {
 
 bashlib.rand.str() {
 [[ "$1" = *[a-zA-Z]* ]] && checkargs "$1" "Usage: ${FUNCNAME[0]} <n>\nPrints a random string. Default length is 32\nLength can be given as an argument." && tr -dc "a-zA-Z0-9" </dev/urandom | head -c "${1:-32}"
+}
+
+  ### Math ###
+
+bashlib.math() {
+  awk "BEGIN { print $*}"
 }
 
   ### Net ###
@@ -215,27 +221,27 @@ checkargs "$1" "Usage: ${FUNCNAME[0]} [tcp|udp] [host] <port>\nCreates a network
 }
 
 bashlib.net.close() {
-  checkargs "$1" "Usage: ${FUNCNAME[0]} <fd>\nCloses an open network connection"
+checkargs "$1" "Usage: ${FUNCNAME[0]} <fd>\nCloses an open network connection"
   local myfd="$1"
   eval "exec $myfd>&-"
 }
 
 bashlib.net.send() {
-  checkargs "$1" "Usage: ${FUNCNAME[0]} <fd> data\nSends data to an open connection but data must be enclosed in double quotes"
+checkargs "$1" "Usage: ${FUNCNAME[0]} <fd> data\nSends data to an open connection but data must be enclosed in double quotes"
   local myfd="$1"
   local data="$2"
   echo "$data" >& "$myfd"
 }
 
 bashlib.net.read() {
-  checkargs "$1" "Usage: ${FUNCNAME[0]} <fd>\nReads data from an open connection"
+checkargs "$1" "Usage: ${FUNCNAME[0]} <fd>\nReads data from an open connection"
   local myfd="$1"
   read -r data <& "$myfd"
   echo "$data"
 }
 
 bashlib.net.portscan() {
-  checkargs "$1" "Usage: ${FUNCNAME[0]} [tcp|udp] [host] <port>\nScans Port of target host"
+checkargs "$1" "Usage: ${FUNCNAME[0]} [tcp|udp] [host] <port>\nScans Port of target host"
   host="$2"
   proto="$1"
   port="$3"
@@ -257,6 +263,6 @@ bashlib.net.portscan() {
 }
 
 bashlib.list() {
-  fns=$(grep 'bashlib.*)' bashlib.lib | cut -d' ' -f2 | cut -d'(' -f1 | head -n -1)
+  fns=$(grep 'bashlib.*)' bashlib.sh | cut -d' ' -f1 | cut -d'(' -f1 | head -n -1)
   echo "$fns"
 }
