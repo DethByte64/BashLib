@@ -3,7 +3,7 @@ A Bash Source file that contains many useful functions.
 
 BashLib is a Bash Source file that
 contains many different functions that can be used
-in various ways some of these are for strings,
+in various ways some of these are for strings, cursor movements, 
 numbers, randoms and networking. There are a total
 of 47 functions. For a full list of functions, Run this command.
 ```bash
