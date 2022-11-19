@@ -149,6 +149,8 @@ bashlib.cursor.getPos() {
   echo "$line $col"
 }
 
+bashlib.cursor.hide() { echo -en "\033[?25l"; }
+bashlib.cursor.show() { echo -en "\033[?25h"; }
 bashlib.cursor.up() { echo -en "\033[${1}A"; }
 bashlib.cursor.down() { echo -en "\033[${1}B"; }
 bashlib.cursor.right() { echo -en "\033[${1}C"; }
