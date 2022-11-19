@@ -5,7 +5,7 @@
 # contains many different functions that can be used
 # in various ways some of these are for strings,
 # numbers, randoms and networking. There are a total
-# of 45 functions. For a full list of functions, source
+# of 47 functions. For a full list of functions, source
 # the file with ". bashlib.sh" then execute "bashlib.list"
 
 checkargs() {
