@@ -117,17 +117,28 @@ bashlib.str.setConfig() {
   local key="$1"
   local val="$2"
   local file="$3"
+  local tmp=".tmpconf"
+  local change=0
+  if [ ! -f "$tmp" ]; then
+    touch "$tmp"
+  fi
+  if [ ! -f "$file" ]; then
+    touch "$file"
+  fi
   while read -r line; do
-    if (echo "$line" | grep -q "$key"); then
-      oldval="$(echo "$line" | cut -d'=' -f2)"
-      echo "${line/$oldval/$val}"
-      echo "${line/$oldval/$val}" >> tmpconfig
+    local only_key="$(echo "$line" | cut -d'=' -f1)"
+    if [ "$only_key" = "$key" ]; then
+      local oldval="$(echo "$line" | cut -d'=' -f2)"
+      echo "${line//$oldval/$val}" >> "$tmp"
+      change=1
     else
-      echo "$line"
-      echo "$line" >> tmpconfig
+      echo "$line" >> "$tmp"
     fi
   done < "$file"
-  cat tmpconfig > "$file" && rm tmpconfig
+  if [ "$change" = "0" ]; then
+    echo "$key=$val" >> "$tmp"
+  fi
+  cat "$tmp" > "$file" && rm "$tmp"
 }
 
   ### Cursors ###
