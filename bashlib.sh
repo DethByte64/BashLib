@@ -119,6 +119,8 @@ bashlib.str.setConfig() {
   local file="$3"
   local tmp=".tmpconf"
   local change=0
+  local oldval=""
+  local only_key=""
   if [ ! -f "$tmp" ]; then
     touch "$tmp"
   fi
@@ -126,9 +128,9 @@ bashlib.str.setConfig() {
     touch "$file"
   fi
   while read -r line; do
-    local only_key="$(echo "$line" | cut -d'=' -f1)"
+    only_key="$(echo "$line" | cut -d'=' -f1)"
     if [ "$only_key" = "$key" ]; then
-      local oldval="$(echo "$line" | cut -d'=' -f2)"
+      oldval="$(echo "$line" | cut -d'=' -f2)"
       echo "${line//$oldval/$val}" >> "$tmp"
       change=1
     else
@@ -156,6 +158,7 @@ bashlib.cursor.getPos() {
   IFS=' ' read -r -d R -a pos
   stty "$oldstty"
   line="$(($(echo "${pos[0]:2}" |cut -d';' -f1) - 1))"
+  # shellcheck disable=SC2128
   col="$(echo "${pos}[1]"|cut -d';' -f2 | cut -d'[' -f1)"
   echo "$line $col"
 }
