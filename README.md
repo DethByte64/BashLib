@@ -19,6 +19,19 @@ of 47 functions. For a full list of functions, Run this command.
 * bashlib.str.getConfig
 * bashlib.str.setConfig
 
+## Input
+* bashlib.input.listen
+Get keys as they are typed and expose hooks to do thinhs when keys are pressed
+supports:
+0-9
+a-z
+A-Z
+space
+enter
+tab
+backspace
+arrow keys
+
 ## Cursor Styles and Movements
 ### Cursor Movements and Helpers
 * bashlib.cursor.setPos
