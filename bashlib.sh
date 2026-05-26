@@ -173,80 +173,14 @@ bashlib.cursor.backspace() { echo -en "\b"; }
 
   ### Input ###
 bashlib.input.listen() {
-#  checkargs "" "Usage: ${FUNCNAME[0]}\nStarts an interactive key listener that calls on_* functions"
-
-  local key
-  local esc
-  _bashlib_listener="go"
-  while [ "$_bashlib_listener" != "stop" ]; do
-    declare -F pre_input_hook >/dev/null && pre_input_hook
     # Read one character
     IFS='' read -rsn1 key
     case "$key" in
       '') declare -F on_enter >/dev/null && on_enter ;;
       ' ') declare -F on_space >/dev/null && on_space ;;
-      0) declare -F on_0 >/dev/null && on_0 ;;
-      1) declare -F on_1 >/dev/null && on_1 ;;
-      2) declare -F on_2 >/dev/null && on_2 ;;
-      3) declare -F on_3 >/dev/null && on_3 ;;
-      4) declare -F on_4 >/dev/null && on_4 ;;
-      5) declare -F on_5 >/dev/null && on_5 ;;
-      6) declare -F on_6 >/dev/null && on_6 ;;
-      7) declare -F on_7 >/dev/null && on_7 ;;
-      8) declare -F on_8 >/dev/null && on_8 ;;
-      9) declare -F on_9 >/dev/null && on_9 ;;
-      A) declare -F on_A >/dev/null && on_A ;;
-      B) declare -F on_B >/dev/null && on_B ;;
-      C) declare -F on_C >/dev/null && on_C ;;
-      D) declare -F on_D >/dev/null && on_D ;;
-      E) declare -F on_E >/dev/null && on_E ;;
-      F) declare -F on_F >/dev/null && on_F ;;
-      G) declare -F on_G >/dev/null && on_G ;;
-      H) declare -F on_H >/dev/null && on_H ;;
-      I) declare -F on_I >/dev/null && on_I ;;
-      J) declare -F on_J >/dev/null && on_J ;;
-      K) declare -F on_K >/dev/null && on_K ;;
-      L) declare -F on_L >/dev/null && on_L ;;
-      M) declare -F on_M >/dev/null && on_M ;;
-      N) declare -F on_N >/dev/null && on_N ;;
-      O) declare -F on_O >/dev/null && on_O ;;
-      P) declare -F on_P >/dev/null && on_P ;;
-      Q) declare -F on_Q >/dev/null && on_Q ;;
-      R) declare -F on_R >/dev/null && on_R ;;
-      S) declare -F on_S >/dev/null && on_S ;;
-      T) declare -F on_T >/dev/null && on_T ;;
-      U) declare -F on_U >/dev/null && on_U ;;
-      V) declare -F on_V >/dev/null && on_V ;;
-      W) declare -F on_W >/dev/null && on_W ;;
-      X) declare -F on_X >/dev/null && on_X ;;
-      Y) declare -F on_Y >/dev/null && on_Y ;;
-      Z) declare -F on_Z >/dev/null && on_Z ;;
-      a) declare -F on_a >/dev/null && on_a ;;
-      b) declare -F on_b >/dev/null && on_b ;;
-      c) declare -F on_c >/dev/null && on_c ;;
-      d) declare -F on_d >/dev/null && on_d ;;
-      e) declare -F on_e >/dev/null && on_e ;;
-      f) declare -F on_f >/dev/null && on_f ;;
-      g) declare -F on_g >/dev/null && on_g ;;
-      h) declare -F on_h >/dev/null && on_h ;;
-      i) declare -F on_i >/dev/null && on_i ;;
-      j) declare -F on_j >/dev/null && on_j ;;
-      k) declare -F on_k >/dev/null && on_k ;;
-      l) declare -F on_l >/dev/null && on_l ;;
-      m) declare -F on_m >/dev/null && on_m ;;
-      n) declare -F on_n >/dev/null && on_n ;;
-      o) declare -F on_o >/dev/null && on_o ;;
-      p) declare -F on_p >/dev/null && on_p ;;
-      q) declare -F on_q >/dev/null && on_q ;;
-      r) declare -F on_r >/dev/null && on_r ;;
-      s) declare -F on_s >/dev/null && on_s ;;
-      t) declare -F on_t >/dev/null && on_t ;;
-      u) declare -F on_u >/dev/null && on_u ;;
-      v) declare -F on_v >/dev/null && on_v ;;
-      w) declare -F on_w >/dev/null && on_w ;;
-      x) declare -F on_x >/dev/null && on_x ;;
-      y) declare -F on_y >/dev/null && on_y ;;
-      z) declare -F on_z >/dev/null && on_z ;;
+      [0-9a-zA-Z]) declare -F on_$key >/dev/null && on_$key ;;
+      $'\t') declare -F on_tab >/dev/null && on_tab ;;
+      $'\x7f'|$'\b')  declare -F on_backspace >/dev/null && on_backspace ;;
       *)  # Escape sequence (Arrow keys)
         # Read the next two characters of the escape sequence
         read -rsn2 key || continue
@@ -258,12 +192,6 @@ bashlib.input.listen() {
         esac
       ;;
     esac
-    declare -F post_input_hook >/dev/null && post_input_hook
-  done
-}
-
-bashlib.input.stop() {
-_bashlib_listener="stop"
 }
 
   ### Style ###
